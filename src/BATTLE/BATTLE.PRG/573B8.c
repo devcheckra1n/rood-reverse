@@ -4,7 +4,12 @@
 #include "573B8.h"
 #include "../SLUS_010.40/main.h"
 
+void func_800A0204(int, int, int, int);
+void func_8007D260(int);
+void func_800BBDDC(void);
+
 extern u_char D_800E9C30[];
+extern char D_800F4B70[];
 extern vs_main_CdQueueSlot* D_800F4BBC;
 extern vs_main_CdFile D_800F4BF0;
 
@@ -43,7 +48,17 @@ extern u_char D_800EB9AC;
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/573B8", func_800BFBB8);
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/573B8", func_800BFD9C);
+void func_800BFD9C(void)
+{
+    int i;
+
+    for (i = 0; i < 0x11; ++i) {
+        if (D_800F4B70[i] != 0) {
+            func_8007D260(i);
+        }
+    }
+    func_800BBDDC();
+}
 
 short vs_battle_getShort(u_char* arg0)
 {
@@ -77,7 +92,16 @@ void func_800C00E8(int arg0, void* arg1)
     vs_main_cdEnqueue(D_800F4BBC, arg1);
 }
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/573B8", func_800C0150);
+void func_800C0150(void)
+{
+    short i;
+
+    for (i = 0; i < 0x11; ++i) {
+        if (func_8007CF64(i) != NULL) {
+            func_800A0204(i, 1, 0, 0);
+        }
+    }
+}
 
 __asm__("glabel vs_battle_copyAligned;"
         "and       $t0, $a2, 0x7;"
