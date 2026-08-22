@@ -5,6 +5,7 @@
 #include "../SLUS_010.40/main.h"
 
 void func_800A0204(int, int, int, int);
+void func_80040F8C(SVECTOR*, MATRIX*);
 void func_8007D260(int);
 void func_800BBDDC(void);
 
@@ -259,7 +260,45 @@ void func_800C0738(void)
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/573B8", func_800C0758);
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/573B8", func_800C085C);
+void* func_800C085C(u_char* arg0, short arg1)
+{
+    short* v = (short*)0x1F800350;
+    MATRIX* m = (MATRIX*)0x1F800330;
+    short* p;
+    u_char* src;
+    int off;
+    int i;
+    int j;
+
+    v[0] = -(arg0[3] << 4);
+    v[1] = arg1;
+    v[2] = 0;
+    func_80040F8C((SVECTOR*)v, m);
+
+    i = 0;
+    off = 0x10;
+    for (; i < 3; ++i) {
+        j = 0;
+        src = &arg0[i];
+        p = v;
+        for (; j < 3; ++j, ++p) {
+            if (i == j) {
+                *p = *src << 5;
+            } else {
+                *p = 0;
+            }
+        }
+        ApplyMatrixSV(m, (SVECTOR*)v, (SVECTOR*)((char*)v + off));
+        off += 8;
+    }
+
+    for (i = 0; i < 3; ++i) {
+        for (j = 0; j < 3; ++j) {
+            v[(i * 3) + j] = v[8 + i + (j * 4)];
+        }
+    }
+    return v;
+}
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/573B8", func_800C0990);
 
