@@ -238,7 +238,7 @@ extern u_char D_800E9C1C[];
 extern short D_800E9C24[];
 extern u_char D_800E9C28;
 extern u_char D_800E9C2C;
-extern u_char D_800E9C30[];
+extern u_char _opcodeLengthTable[];
 extern D_800EB9BC_t* D_800EB9BC;
 extern int D_800F19C8;
 extern u_short D_800F4B20;
@@ -657,7 +657,7 @@ void func_800B6778(u_char* arg0)
             vs_battle_setStateFlag(0xA8, 0);
             return;
         }
-        arg0 = &arg0[D_800E9C30[*arg0]];
+        arg0 = &arg0[_opcodeLengthTable[*arg0]];
     }
 
     func_80093A70();

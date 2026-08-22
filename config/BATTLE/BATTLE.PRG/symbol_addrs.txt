@@ -1193,6 +1193,7 @@ D_800E8F29 = 0x800E8F29;
 _loadShpState = 0x800E8F2A;
 _loadEtmState = 0x800E8F2D;
 _weaponMaterialPaletteMap = 0x800E8FC8;
+_opcodeLengthTable = 0x800E9C30; // size:0x100
 _opcodeFunctionTable = 0x800E9D30;
 vs_battle_limbNames = 0x800EA620;
 vs_battle_statusStrings = 0x800EA868;

@@ -9,7 +9,7 @@ void func_80040F8C(SVECTOR*, MATRIX*);
 void func_8007D260(int);
 void func_800BBDDC(void);
 
-extern u_char D_800E9C30[];
+extern u_char _opcodeLengthTable[];
 extern char D_800F4B70[];
 extern vs_main_CdQueueSlot* D_800F4BBC;
 extern vs_main_CdFile D_800F4BF0;
@@ -69,7 +69,7 @@ short vs_battle_getShort(u_char* arg0)
     return arg0[0] | (arg0[1] << 8);
 }
 
-int func_800BFE34(u_char* arg0) { return D_800E9C30[arg0[0]]; }
+int func_800BFE34(u_char* arg0) { return _opcodeLengthTable[arg0[0]]; }
 
 int func_800BFE50(u_short arg0)
 {
