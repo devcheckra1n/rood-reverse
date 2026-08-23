@@ -3,8 +3,14 @@
 #include <libgpu.h>
 
 void func_8009DF3C(int, int);
+void func_800AA850(int, int, int);
+int func_800A6EE8(SVECTOR*, int, int, int);
+u_int* func_800A8D64(SVECTOR*, int);
+void func_800AC690(int, D_800F4538_t*);
 int func_800A152C(int, int, int);
-int func_800A17BC(int, int, void*, int*);
+int func_800A17BC(int, int, MATRIX*, int*);
+MATRIX* func_800A1DE8(int, int, MATRIX*);
+extern MATRIX D_800F49B8;
 int func_800A1C10(int arg0, int arg1, u_short* arg2, int arg3);
 void func_800A9EB4(int, int, int);
 
@@ -131,9 +137,45 @@ int func_800A152C(int arg0, int arg1, int arg2)
 }
 
 // https://decomp.me/scratch/N9nFn
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/38C1C", func_800A1648);
+int func_800A1648(int arg0, int arg1, int arg2)
+{
+    D_800F4538_unk68* temp_a0;
+    int val;
+    D_800F4538_t* var_v0 = D_800F4538[arg0];
 
-int func_800A1720(int arg0, int arg1, int* arg2, int* arg3)
+    if (var_v0 == NULL) {
+        var_v0 = (D_800F4538_t*)D_800F45E0[arg0];
+        if (var_v0 == NULL) {
+            return -1;
+        }
+    }
+
+    temp_a0 = var_v0->unk0.unk68;
+
+    switch (arg2) {
+    case 0:
+        val = temp_a0->armatures[arg1].unk6;
+        break;
+
+    case 1:
+        val = temp_a0->armatures[arg1].unk7 >> 4;
+        if (val == 0) {
+            return -3;
+        }
+        break;
+
+    case 2:
+        val = temp_a0->armatures[arg1].unk7 & 0xF;
+        if (val == 0) {
+            return -3;
+        }
+        break;
+    }
+
+    return val;
+}
+
+int func_800A1720(int arg0, int arg1, MATRIX* arg2, int* arg3)
 {
     int var_v0 = arg1;
 
@@ -148,13 +190,40 @@ int func_800A1720(int arg0, int arg1, int* arg2, int* arg3)
     }
 
     if (arg1 == 0xFD) {
-        arg2[6] = D_800F4538[arg0]->unk0.position.vy;
+        arg2->t[1] = D_800F4538[arg0]->unk0.position.vy;
     }
 
     return 0;
 }
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/38C1C", func_800A17BC);
+int func_800A17BC(int arg0, int arg1, MATRIX* arg2, int* arg3)
+{
+    int _[22] __attribute__((unused));
+    vs_battle_wepModels_t* model;
+    D_800F4538_t* var_a0;
+
+    *arg2 = *func_800A1DE8(arg0, arg1, &D_800F49B8);
+
+    var_a0 = D_800F4538[arg0];
+    if (var_a0 == NULL) {
+        D_800F4538_t* var_v0 = (D_800F4538_t*)D_800F45E0[arg0];
+        if (var_v0 != NULL) {
+            *arg3 = var_v0->unk0.unk68->armatures[arg1].unk0;
+        }
+    } else if (arg1 == 0xFF) {
+        *arg3 = 0;
+    } else if ((arg1 & 0xF0) == 0x40) {
+        model = vs_battle_wepModels[arg0 * 2];
+        if (model == NULL) {
+            return 0;
+        }
+        *arg3 = model->offsets->armatures[arg1 - 0x3F].unk0;
+    } else {
+        *arg3 = var_a0->unk0.unk68->armatures[arg1].unk0;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/38C1C", func_800A190C);
 
@@ -266,11 +335,94 @@ void func_800A2574(int arg0, short arg1)
     temp_s1->unk0.unkB_4 = 6;
 }
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/38C1C", func_800A25EC);
+void func_800A25EC(D_800F4538_t* arg0)
+{
+    SVECTOR sp10;
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/38C1C", func_800A2790);
+    arg0->unk0.unkA_5 = 0;
 
-void func_800AA850(int, int, int);
+    sp10.vx = arg0->unk1848.unk10.vx;
+    sp10.vy = 0;
+    sp10.vz = arg0->unk1848.unk10.vz;
+
+    sp10.vy = func_800A6EE8(&arg0->unk0.position, sp10.vx, sp10.vz, 1);
+    if (sp10.vy == -0xBB8) {
+        return;
+    }
+
+    sp10.vx += arg0->unk0.position.vx;
+    sp10.vz += arg0->unk0.position.vz;
+
+    if (func_800A8D64(&sp10, 0) == NULL) {
+        return;
+    }
+
+    arg0->unk0.position.vx = sp10.vx;
+    arg0->unk0.position.vz = sp10.vz;
+
+    if (arg0->unk0.unkA_0) {
+        func_800AC690(arg0->unk0.unkF, arg0);
+    } else if (sp10.vy > arg0->unk0.position.vy) {
+        if ((sp10.vy - arg0->unk0.position.vy) >= 0x40) {
+            arg0->unk0.unk34.vx = 0;
+            arg0->unk0.unk34.vy = 0;
+            arg0->unk0.unk34.vz = 0;
+            func_800A0204(arg0->unk0.unkF, 0x2F, 0, 4);
+            arg0->unk181A = 0;
+            arg0->unk0.unkA_3 = 0;
+            arg0->unk0.unk9_6 = 0;
+            arg0->unk0.unkA_0 = 3;
+        } else {
+            arg0->unk0.position.vy = sp10.vy;
+        }
+    } else {
+        arg0->unk0.position.vy = sp10.vy;
+    }
+
+    arg0->unk0.currentTileX = arg0->unk0.position.vx / 128;
+    arg0->unk0.currentTileZ = arg0->unk0.position.vz / 128;
+    arg0->unk0.unk5D = 0;
+}
+
+void func_800A2790(D_800F4538_t* arg0)
+{
+    VECTOR step;
+    int anim;
+    int speed = arg0->unk1848.unk8;
+
+    step.vx = (arg0->unk1848.unk10.vx * speed) / 0x1000000;
+    step.vy = (arg0->unk1848.unk10.vy * speed) / 0x1000000;
+    step.vz = (arg0->unk1848.unk10.vz * speed) / 0x1000000;
+
+    arg0->unk0.position.vx += step.vx;
+    arg0->unk0.position.vy += step.vy;
+    arg0->unk0.position.vz += step.vz;
+
+    arg0->unk0.currentTileX = arg0->unk0.position.vx / 128;
+    arg0->unk0.currentTileZ = arg0->unk0.position.vz / 128;
+    arg0->unk0.unkA_5 = 1;
+
+    func_800AA850(arg0->unk0.unkF, arg0->unk1848.unk6, 12);
+
+    anim = 1;
+    if (speed > 0) {
+        if (step.vy < -2) {
+            anim = 0x20;
+        } else if (step.vy >= 3) {
+            anim = 0x22;
+        } else {
+            anim = 0x1F;
+        }
+        if (speed >= 12) {
+            anim += 6;
+        }
+    }
+
+    if (arg0->animationId != anim) {
+        func_800A0204(arg0->unk0.unkF, anim, 0, 4);
+    }
+}
+
 
 void func_800A291C(D_800F4538_t* arg0)
 {

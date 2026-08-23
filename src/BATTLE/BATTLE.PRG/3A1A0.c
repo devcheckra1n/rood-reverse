@@ -1,4 +1,5 @@
 #include "common.h"
+#include "146C.h"
 #include "30D14.h"
 #include "3A1A0.h"
 
@@ -45,9 +46,38 @@ void func_800A2C48(D_800F4538_t* arg0)
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A2CD4);
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A2FBC);
+void func_800A2FBC(D_800F4538_t* arg0)
+{
+    int dx = arg0->unk0.unk34.vx / arg0->unk5CA;
+    int dy = arg0->unk0.unk34.vy / arg0->unk5CA;
+    int dz = arg0->unk0.unk34.vz / arg0->unk5CA;
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A3054);
+    arg0->unk5CA--;
+
+    arg0->unk0.unk34.vx -= dx;
+    arg0->unk0.position.vx += dx;
+    arg0->unk0.unk34.vy -= dy;
+    arg0->unk0.position.vy += dy;
+    arg0->unk0.unk34.vz -= dz;
+    arg0->unk0.position.vz += dz;
+}
+
+void func_800A3054(D_800F4538_t* arg0, SVECTOR* arg1)
+{
+    short dx = 0x3F;
+    short dz = 0x3F;
+
+    if (arg1->vx < 0) {
+        dx = -0x3F;
+    }
+    if (arg1->vz < 0) {
+        dz = -0x3F;
+    }
+
+    arg0->unk181A = 1;
+    arg0->unk1814 = arg0->unk0.position.vx + dx;
+    arg0->unk1818 = arg0->unk0.position.vz + dz;
+}
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A30A0);
 
@@ -91,7 +121,28 @@ INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A4494);
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A46A4);
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A47C4);
+int func_800A47C4(void)
+{
+    int i;
+
+    for (i = 0; i < 16; i++) {
+        D_800F45E0_t* p = D_800F45E0[i];
+        if (p == NULL) {
+            continue;
+        }
+        if (p->unk8_0) {
+            continue;
+        }
+        if (p->unk9_0) {
+            continue;
+        }
+        if (p->unk1A != 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void func_800A4828(int arg0, MATRIX* arg1)
 {
@@ -107,7 +158,22 @@ void func_800A4828(int arg0, MATRIX* arg1)
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A48CC);
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A4A24);
+func_8008D2C0_t* func_800A4A24(int arg0)
+{
+    func_8008D2C0_t entries[4];
+    int wanted = arg0 - 2;
+    int count;
+    int i;
+
+    count = func_8008D2C0(entries);
+    for (i = 0; i < count; i++) {
+        if (entries[i].unk3 == wanted) {
+            return &entries[i];
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/3A1A0", func_800A4A88);
 

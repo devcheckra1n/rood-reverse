@@ -107,7 +107,7 @@ typedef struct {
     u_char unk3;
     u_short unk4;
     short unk6;
-    u_int unk8;
+    int unk8;
     int unkC;
     SVECTOR unk10;
 } D_800F4538_unk1848;
@@ -118,7 +118,7 @@ typedef struct {
     int vertexGroupsOffset;
     int verticesOffset;
     int polygonsOffset;
-    u_char unk40[0x7C0];
+    _armature_t armatures[124];
 } _wepModelOffsets;
 
 typedef struct {
@@ -257,7 +257,7 @@ typedef struct {
     u_short unk5C4;
     u_short unk5C6;
     u_short unk5C8;
-    u_short unk5CA;
+    volatile u_short unk5CA;
     char unk5CC;
     char unk5CD;
     short unk5CE;

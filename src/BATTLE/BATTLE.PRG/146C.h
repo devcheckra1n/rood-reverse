@@ -5,6 +5,15 @@
 #include "scratch.h"
 
 typedef struct {
+    short unk0;
+    short unk1;
+    short unk2;
+    short unk3;
+} func_8008D2C0_t;
+
+int func_8008D2C0(func_8008D2C0_t arg0[]);
+
+typedef struct {
     short width;
     short height;
     short unk4;
@@ -736,7 +745,7 @@ typedef struct {
         char u8[2];
         u_short u16;
     } unk8;
-    char unkA;
+    signed char unkA;
     char unkB;
     u_short unkC;
     char unkE;

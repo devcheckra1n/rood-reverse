@@ -261,13 +261,6 @@ typedef struct {
 } D_800F1D28_t;
 
 typedef struct {
-    short unk0;
-    short unk1;
-    short unk2;
-    short unk3;
-} func_8008D2C0_t;
-
-typedef struct {
     int unk0;
     int unk4;
     short unk8;

@@ -32,10 +32,7 @@ typedef struct {
     int unk4;
     int unk8;
     int unkC;
-    int unk10;
-    int unk14;
-    int unk18;
-    int unk1C;
+    func_800C1564_t unk10;
     short unk20;
     short unk22;
     int unk24;
@@ -438,7 +435,22 @@ INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/58578", func_800C2B0C);
 
 INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/58578", func_800C2E24);
 
-INCLUDE_ASM("build/src/BATTLE/BATTLE.PRG/nonmatchings/58578", func_800C4650);
+void func_800C4650(D_800F1BAC_t* arg0, int arg1)
+{
+    int i;
+
+    for (i = 0; i < arg1; i++, arg0++) {
+        int id = arg0->unk8.u8[1];
+
+        if ((id >> 4) == 0) {
+            if (func_800C1564(&D_800EB9B8->unk10, (u_short*)arg0) != 0) {
+                func_8009FD5C(id, 0, arg0->unkA);
+            } else {
+                func_8009FE74(id, arg0->unkA);
+            }
+        }
+    }
+}
 
 int vs_battle_mapStickDeadZone(int arg0)
 {
